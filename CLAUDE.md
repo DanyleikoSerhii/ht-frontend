@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Package manager is `pnpm@11.2.2` (pinned via `packageManager` field). Node 22 in CI/EC2.
 
+Always install packages with an exact version — no `^` or `~`. Example: `pnpm add lucide-react@1.16.0` (results in `"lucide-react": "1.16.0"` in `package.json`).
+
 - `pnpm dev` — Vite dev server on **port 8000** (see `vite.config.ts`).
 - `pnpm build` — runs `tsr generate && tsc -b && vite build`. Route tree generation is part of build; do not edit `src/routeTree.gen.ts`.
 - `pnpm typecheck` — `tsr generate && tsc -b --noEmit`. Always regenerates routes first.

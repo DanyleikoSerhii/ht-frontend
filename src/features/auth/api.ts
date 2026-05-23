@@ -1,4 +1,5 @@
 import { api } from '@/shared/api/client';
+import type { User as BackendUser } from '@/shared/api/types';
 
 import {
   LogoutResponseSchema,
@@ -9,7 +10,9 @@ import {
 
 export async function getMe(): Promise<MeResponse> {
   const json = await api.get('auth/me').json();
-  return MeResponseSchema.parse(json);
+  const result = MeResponseSchema.parse(json);
+  void (result.user satisfies BackendUser);
+  return result;
 }
 
 export async function logout(): Promise<LogoutResponse> {

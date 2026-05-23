@@ -2,7 +2,7 @@ import ky from 'ky';
 
 import { ApiError } from './errors';
 
-const prefix = import.meta.env.VITE_API_BASE_URL;
+const prefix = `${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '')}/api`;
 const isDev = import.meta.env.DEV;
 
 export const api = ky.create({

@@ -1,5 +1,121 @@
 {
-  "app": {
-    "name": "Habit Tracker"
+  "app": { "name": "Habit Tracker" },
+  "nav": {
+    "today": "Today",
+    "habits": "Habits",
+    "stats": "Stats",
+    "settings": "Settings"
+  },
+  "auth": {
+    "loginWithGoogle": "Continue with Google",
+    "logout": "Log out",
+    "userMenu": "User menu"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "archive": "Archive",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "add": "Add",
+    "close": "Close",
+    "confirm": "Confirm",
+    "noData": "No data"
+  },
+  "today": {
+    "title": "Today",
+    "notDueToday": "Not due today",
+    "empty": "No habits for today",
+    "addFirst": "Add your first habit"
+  },
+  "habits": {
+    "title": "Habits",
+    "addHabit": "Habit",
+    "searchPlaceholder": "Search...",
+    "showArchived": "Show archived",
+    "hideArchived": "Hide archived",
+    "empty": "No habits yet",
+    "emptyArchive": "Archive is empty",
+    "createTitle": "New Habit",
+    "editTitle": "Edit Habit",
+    "deleteConfirmTitle": "Delete habit?",
+    "deleteConfirmDesc": "This action cannot be undone.",
+    "fields": {
+      "title": "Name",
+      "description": "Description",
+      "color": "Color",
+      "icon": "Icon",
+      "kind": "Type",
+      "targetPerDay": "Goal per day",
+      "frequency": "Frequency",
+      "reminderTime": "Reminder"
+    },
+    "kinds": {
+      "boolean": "Yes / No",
+      "counter": "Counter"
+    },
+    "frequency": {
+      "daily": "Every day",
+      "weekdays": "Weekdays",
+      "weekends": "Weekends",
+      "custom": "Custom"
+    },
+    "actions": {
+      "edit": "Edit",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
+      "delete": "Delete",
+      "openMenu": "Open menu"
+    },
+    "toast": {
+      "created": "Habit created",
+      "updated": "Habit updated",
+      "deleted": "Habit deleted",
+      "archived": "Habit archived",
+      "unarchived": "Habit restored",
+      "error": "Something went wrong"
+    }
+  },
+  "stats": {
+    "title": "Stats",
+    "periods": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days",
+      "365d": "365 days"
+    },
+    "completionRate": "Completion rate",
+    "totalCompletions": "Total completions",
+    "bestStreak": "Best streak",
+    "activeHabits": "Active habits",
+    "empty": "No data for this period",
+    "weekdays": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "label": "Language"
+    },
+    "account": {
+      "label": "Account",
+      "logout": "Log out"
+    }
   }
 }

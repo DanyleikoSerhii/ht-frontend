@@ -36,6 +36,7 @@ const HabitObject = z.object({
     .nullable(),
   sortOrder: z.number().int(),
   createdAt: IsoDateTime,
+  updatedAt: IsoDateTime,
   archivedAt: IsoDateTime.nullable(),
 });
 
@@ -51,6 +52,7 @@ export type Habit = z.infer<typeof HabitSchema>;
 export const CreateHabitInput = HabitObject.omit({
   id: true,
   createdAt: true,
+  updatedAt: true,
   archivedAt: true,
   sortOrder: true,
 }).extend({

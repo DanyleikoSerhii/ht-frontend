@@ -1,6 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { Activity, BarChart3, CalendarDays, LogOut, Settings } from 'lucide-react';
 import { type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAuth, useLogout } from '@/features/auth/hooks';
 import { cn } from '@/lib/utils';
@@ -12,18 +13,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
+import { ThemeToggle } from '@/shared/ui/theme-toggle';
 
 type NavItem = {
   to: string;
-  label: string;
+  labelKey: string;
   icon: typeof Activity;
 };
 
 const NAV_ITEMS: ReadonlyArray<NavItem> = [
-  { to: '/', label: 'Today', icon: CalendarDays },
-  { to: '/habits', label: 'Habits', icon: Activity },
-  { to: '/stats', label: 'Stats', icon: BarChart3 },
-  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/', labelKey: 'nav.today', icon: CalendarDays },
+  { to: '/habits', labelKey: 'nav.habits', icon: Activity },
+  { to: '/stats', labelKey: 'nav.stats', icon: BarChart3 },
+  { to: '/settings', labelKey: 'nav.settings', icon: Settings },
 ];
 
 type AppLayoutProps = {
@@ -31,6 +33,7 @@ type AppLayoutProps = {
 };
 
 export function AppLayout({ children }: AppLayoutProps) {
+  const { t } = useTranslation();
   return (
     <div className="min-h-svh bg-background text-foreground">
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur md:px-6">
@@ -39,9 +42,12 @@ export function AppLayout({ children }: AppLayoutProps) {
             aria-hidden
             className="inline-block size-6 rounded bg-primary text-primary-foreground"
           />
-          <span>Habit Tracker</span>
+          <span>{t('app.name')}</span>
         </Link>
-        <UserMenu />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <UserMenu />
+        </div>
       </header>
 
       <div className="md:flex">
@@ -74,6 +80,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 }
 
 function UserMenu() {
+  const { t } = useTranslation();
   const auth = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
@@ -90,7 +97,7 @@ function UserMenu() {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label="User menu"
+          aria-label={t('auth.userMenu')}
           className="flex size-8 items-center justify-center overflow-hidden rounded-full bg-muted text-sm font-medium text-muted-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {user?.avatarUrl ? (
@@ -120,7 +127,7 @@ function UserMenu() {
           }}
         >
           <LogOut />
-          <span>Log out</span>
+          <span>{t('auth.logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -128,6 +135,7 @@ function UserMenu() {
 }
 
 function SidebarLink({ item }: { item: NavItem }) {
+  const { t } = useTranslation();
   const Icon = item.icon;
   return (
     <Link
@@ -141,12 +149,13 @@ function SidebarLink({ item }: { item: NavItem }) {
       }}
     >
       <Icon className="size-4" aria-hidden />
-      <span>{item.label}</span>
+      <span>{t(item.labelKey)}</span>
     </Link>
   );
 }
 
 function BottomNavLink({ item }: { item: NavItem }) {
+  const { t } = useTranslation();
   const Icon = item.icon;
   return (
     <Link
@@ -160,7 +169,7 @@ function BottomNavLink({ item }: { item: NavItem }) {
       }}
     >
       <Icon className="size-5" aria-hidden />
-      <span>{item.label}</span>
+      <span>{t(item.labelKey)}</span>
     </Link>
   );
 }

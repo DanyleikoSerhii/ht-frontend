@@ -1,5 +1,121 @@
 {
-  "app": {
-    "name": "Трекер привычек"
+  "app": { "name": "Трекер привычек" },
+  "nav": {
+    "today": "Сегодня",
+    "habits": "Привычки",
+    "stats": "Статистика",
+    "settings": "Настройки"
+  },
+  "auth": {
+    "loginWithGoogle": "Войти через Google",
+    "logout": "Выйти",
+    "userMenu": "Меню пользователя"
+  },
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "archive": "В архив",
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "retry": "Повторить",
+    "add": "Добавить",
+    "close": "Закрыть",
+    "confirm": "Подтвердить",
+    "noData": "Нет данных"
+  },
+  "today": {
+    "title": "Сегодня",
+    "notDueToday": "Не на сегодня",
+    "empty": "Нет привычек на сегодня",
+    "addFirst": "Добавить первую привычку"
+  },
+  "habits": {
+    "title": "Привычки",
+    "addHabit": "Привычка",
+    "searchPlaceholder": "Поиск...",
+    "showArchived": "Показать архивные",
+    "hideArchived": "Скрыть архивные",
+    "empty": "Нет привычек",
+    "emptyArchive": "Архив пуст",
+    "createTitle": "Новая привычка",
+    "editTitle": "Редактировать привычку",
+    "deleteConfirmTitle": "Удалить привычку?",
+    "deleteConfirmDesc": "Это действие нельзя отменить.",
+    "fields": {
+      "title": "Название",
+      "description": "Описание",
+      "color": "Цвет",
+      "icon": "Иконка",
+      "kind": "Тип",
+      "targetPerDay": "Цель в день",
+      "frequency": "Частота",
+      "reminderTime": "Напоминание"
+    },
+    "kinds": {
+      "boolean": "Да / Нет",
+      "counter": "Счётчик"
+    },
+    "frequency": {
+      "daily": "Каждый день",
+      "weekdays": "По будням",
+      "weekends": "По выходным",
+      "custom": "Выборочно"
+    },
+    "actions": {
+      "edit": "Редактировать",
+      "archive": "В архив",
+      "unarchive": "Из архива",
+      "delete": "Удалить",
+      "openMenu": "Открыть меню"
+    },
+    "toast": {
+      "created": "Привычка создана",
+      "updated": "Привычка обновлена",
+      "deleted": "Привычка удалена",
+      "archived": "Привычка архивирована",
+      "unarchived": "Привычка восстановлена",
+      "error": "Что-то пошло не так"
+    }
+  },
+  "stats": {
+    "title": "Статистика",
+    "periods": {
+      "7d": "7 дней",
+      "30d": "30 дней",
+      "90d": "90 дней",
+      "365d": "365 дней"
+    },
+    "completionRate": "Выполнение",
+    "totalCompletions": "Всего отметок",
+    "bestStreak": "Лучшая серия",
+    "activeHabits": "Активных привычек",
+    "empty": "Нет данных за этот период",
+    "weekdays": {
+      "mon": "Пн",
+      "tue": "Вт",
+      "wed": "Ср",
+      "thu": "Чт",
+      "fri": "Пт",
+      "sat": "Сб",
+      "sun": "Вс"
+    }
+  },
+  "settings": {
+    "title": "Настройки",
+    "theme": {
+      "label": "Тема",
+      "light": "Светлая",
+      "dark": "Тёмная",
+      "system": "Системная"
+    },
+    "language": {
+      "label": "Язык"
+    },
+    "account": {
+      "label": "Аккаунт",
+      "logout": "Выйти из аккаунта"
+    }
   }
 }

@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { EntryId, IsoDateTime, type HabitId, type LocalDate } from '@/shared/api/primitives';
+import { type HabitId, type LocalDate } from '@/shared/api/primitives';
 import { queryKeys } from '@/shared/api/query-keys';
 
-import { deleteEntry, getToday, upsertEntry } from './api';
+import { deleteEntry, getEntriesRange, getToday, upsertEntry } from './api';
 import { type TodayItem, type UpsertEntryInput } from './schemas';
 
 export function useTodayItems(date: LocalDate) {
@@ -16,6 +16,7 @@ export function useTodayItems(date: LocalDate) {
 
 type ToggleEntryVars = {
   habitId: HabitId;
+  date: LocalDate;
   input: UpsertEntryInput;
 };
 
@@ -23,29 +24,20 @@ export function useToggleEntry() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ habitId, input }: ToggleEntryVars) => upsertEntry(habitId, input),
+    mutationFn: ({ habitId, date, input }: ToggleEntryVars) => upsertEntry(habitId, date, input),
 
-    onMutate: async ({ habitId, input }) => {
-      const queryKey = queryKeys.entries.today(input.date);
+    onMutate: async ({ habitId, date, input }) => {
+      const queryKey = queryKeys.entries.today(date);
       await queryClient.cancelQueries({ queryKey });
 
       const snapshot = queryClient.getQueryData<TodayItem[]>(queryKey);
 
       queryClient.setQueryData<TodayItem[]>(queryKey, (prev) =>
         prev?.map((item) => {
-          if (item.habit.id !== habitId) return item;
-          const now = IsoDateTime.parse(new Date().toISOString());
+          if (item.habitId !== habitId) return item;
           const entry = item.entry
             ? { ...item.entry, count: input.count, note: input.note ?? item.entry.note }
-            : {
-                id: EntryId.parse(crypto.randomUUID()),
-                habitId,
-                date: input.date,
-                count: input.count,
-                note: input.note ?? null,
-                createdAt: now,
-                updatedAt: now,
-              };
+            : { count: input.count, note: input.note ?? null };
           return { ...item, entry };
         }),
       );
@@ -58,10 +50,17 @@ export function useToggleEntry() {
       toast.error('Failed to update entry');
     },
 
-    onSettled: (_data, _err, { habitId, input }) => {
-      void queryClient.invalidateQueries({ queryKey: queryKeys.entries.today(input.date) });
+    onSettled: (_data, _err, { habitId, date }) => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.entries.today(date) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.habits.detail(habitId) });
     },
+  });
+}
+
+export function useEntriesRange(habitId: HabitId, from: LocalDate, to: LocalDate) {
+  return useQuery({
+    queryKey: queryKeys.entries.range(habitId, from, to),
+    queryFn: () => getEntriesRange(habitId, from, to),
   });
 }
 

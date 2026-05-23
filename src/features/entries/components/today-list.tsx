@@ -52,7 +52,7 @@ export function TodayList({ date }: Props) {
         <section aria-label="Today's habits">
           <div className="space-y-3">
             {due.map((item) => (
-              <TodayItemCard key={item.habit.id} item={item} date={date} />
+              <TodayItemCard key={item.habitId} item={item} date={date} />
             ))}
           </div>
         </section>
@@ -74,7 +74,7 @@ export function TodayList({ date }: Props) {
           {notDueOpen && (
             <div className="mt-2 space-y-3 opacity-60">
               {notDue.map((item) => (
-                <TodayItemCard key={item.habit.id} item={item} date={date} />
+                <TodayItemCard key={item.habitId} item={item} date={date} />
               ))}
             </div>
           )}

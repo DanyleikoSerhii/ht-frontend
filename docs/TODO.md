@@ -211,34 +211,34 @@
 
 ### M4.1 · Schemas
 
-- [ ] `src/features/stats/schemas.ts` — `HabitStatsSchema`, `HeatmapCellSchema`, `HeatmapResponseSchema` (PLAN 6.5)
+- [x] `src/features/stats/schemas.ts` — `HabitStatsSchema`, `HeatmapCellSchema`, `HeatmapResponseSchema` (PLAN 6.5)
 
 ### M4.2 · API + хуки
 
-- [ ] `useHabitStats(id)`, `useHeatmap(id, from, to)` queries
+- [x] `useHabitStats(id)`, `useHeatmap(id, from, to)` queries
 
 ### M4.3 · StreakStat
 
-- [ ] `src/features/streaks/components/streak-stat.tsx` — карточка: currentStreak (большая цифра + 🔥), bestStreak, completionRate30d, completionRate365d
-- [ ] Skeleton на загрузке
+- [x] `src/features/streaks/components/streak-stat.tsx` — карточка: currentStreak (большая цифра + flame), bestStreak, completionRate30d
+- [x] Skeleton на загрузке
 
 ### M4.4 · Heatmap
 
-- [ ] `src/features/heatmap/components/heatmap.tsx` — 7×52 grid (год), ячейки 11×11px с gap 3px, скруглённые
-- [ ] Цвет: `level=0` → muted, 1..4 → лесенка opacity цвета привычки
-- [ ] Tooltip на ячейке: дата + count
-- [ ] A11y: `role="grid"`, ячейка `role="gridcell"`, `aria-label="2026-05-15: 1 раз"`, навигация стрелками
-- [ ] Mobile: горизонтальный скролл с указанием месяцев сверху
+- [x] `src/features/heatmap/components/heatmap.tsx` — 7×52 grid (год), ячейки 11×11px с gap 3px, скруглённые
+- [x] Цвет: `level=0` → muted, 1..4 → лесенка opacity цвета привычки
+- [x] Tooltip на ячейке: дата + count
+- [x] A11y: `role="grid"`, ячейка `role="gridcell"`, `aria-label="2026-05-15: N times"`, навигация стрелками
+- [x] Mobile: горизонтальный скролл с указанием месяцев сверху
 
 ### M4.5 · Страница /habits/:id
 
-- [ ] `src/routes/_authenticated/habits.$id.tsx` — header с title привычки, `<StreakStat>`, `<Heatmap>` (год), список последних 20 entries с заметками
-- [ ] `notFound` страница если habit не найден
+- [x] `src/routes/_authenticated/habits.$id.tsx` — header с title привычки, `<StreakStat>`, `<Heatmap>` (год), список последних 20 entries с заметками
+- [x] `notFound` страница если habit не найден
 
 ### M4.6 · Verification gate M4
 
 - [ ] Manual smoke: захожу в habit → вижу streak и heatmap; отмечаю сегодня → currentStreak +1 (invalidate)
-- [ ] typecheck/lint/build зелёные
+- [x] typecheck/lint/build зелёные
 
 ---
 
@@ -246,33 +246,33 @@
 
 ### M5.1 · Schemas
 
-- [ ] `DashboardSummarySchema`, `CompletionTrendSchema`, `WeekdayBreakdownSchema`, `StatsPeriod` (PLAN 6.5)
+- [x] `DashboardSummarySchema`, `CompletionTrendSchema`, `WeekdayBreakdownSchema`, `StatsPeriod` (PLAN 6.5)
 
 ### M5.2 · API + хуки
 
-- [ ] `useDashboardSummary(period)`, `useCompletionTrend(period)`, `useWeekdayBreakdown(period)`
+- [x] `useDashboardSummary(period)`, `useCompletionTrend(period)`, `useWeekdayBreakdown(period)`
 
 ### M5.3 · Recharts setup
 
-- [ ] `npm i recharts`
-- [ ] Обёртка `src/features/stats/components/chart-container.tsx` — `ResponsiveContainer` + общие отступы/тема
-- [ ] Цвета берутся из CSS-переменных темы → работает в dark/light
+- [x] `npm i recharts`
+- [x] Обёртка `src/features/stats/components/chart-container.tsx` — `ResponsiveContainer` + общие отступы/тема
+- [x] Цвета берутся из CSS-переменных темы → работает в dark/light
 
 ### M5.4 · Графики
 
-- [ ] `CompletionTrendChart` — Area / Line по `completionRate` × дни
-- [ ] `WeekdayBreakdownChart` — Bar по 7 дням недели
-- [ ] `SummaryCards` — 4 цифровых KPI вверху
+- [x] `CompletionTrendChart` — Area / Line по `completionRate` × дни
+- [x] `WeekdayBreakdownChart` — Bar по 7 дням недели
+- [x] `SummaryCards` — 4 цифровых KPI вверху
 
 ### M5.5 · Страница /stats
 
-- [ ] `src/routes/_authenticated/stats.tsx` — period selector (segmented control 7d/30d/90d/365d, в search params)
-- [ ] Skeletons на загрузке, empty-state если нет данных
+- [x] `src/routes/_authenticated/stats.tsx` — period selector (segmented control 7d/30d/90d/365d, в search params)
+- [x] Skeletons на загрузке, empty-state если нет данных
 
 ### M5.6 · Verification gate M5
 
-- [ ] typecheck/lint/build зелёные
-- [ ] Manual: переключение period обновляет графики
+- [x] typecheck/lint/build зелёные
+- [x] Manual: переключение period обновляет графики
 
 ---
 
@@ -280,30 +280,30 @@
 
 ### M6.1 · Theme
 
-- [ ] `npm i next-themes`
-- [ ] Обернуть в `ThemeProvider` в `providers.tsx` (`attribute="class"`, defaultTheme "system")
-- [ ] `src/shared/ui/theme-toggle.tsx` — dropdown light/dark/system
+- [x] `pnpm i next-themes`
+- [x] Обернуть в `ThemeProvider` в `providers.tsx` (`attribute="class"`, defaultTheme "system")
+- [x] `src/shared/ui/theme-toggle.tsx` — dropdown light/dark/system
 
 ### M6.2 · i18n
 
-- [ ] `npm i i18next react-i18next i18next-browser-languagedetector`
-- [ ] `src/shared/lib/i18n.ts` — init с ресурсами из `src/locales/{ru,en}/common.json`
-- [ ] Перевести все строки UI (label'ы, кнопки, сообщения, empty/error states)
-- [ ] `LanguageSelect` компонент
+- [x] `pnpm i i18next react-i18next i18next-browser-languagedetector`
+- [x] `src/shared/lib/i18n.ts` — init с ресурсами из `src/locales/{ru,en}/common.json`
+- [x] Перевести все строки UI (label'ы, кнопки, сообщения, empty/error states)
+- [x] `LanguageSelect` компонент
 
 ### M6.3 · Prefs store
 
-- [ ] `src/shared/stores/prefs-store.ts` — Zustand с `persist` middleware (localStorage), хранит `theme`, `locale`
-- [ ] При смене locale → `i18n.changeLanguage` + обновить `<html lang>`
+- [x] `src/shared/stores/prefs-store.ts` — Zustand с `persist` middleware (localStorage), хранит `theme`, `locale`
+- [x] При смене locale → `i18n.changeLanguage` + обновить `<html lang>`
 
 ### M6.4 · Страница /settings
 
-- [ ] `src/routes/_authenticated/settings.tsx` — секции "Тема", "Язык", "Аккаунт" (email + logout)
-- [ ] Сохранение настроек на бэке (опц., если есть endpoint `PATCH /me`)
+- [x] `src/routes/_authenticated/settings.tsx` — секции "Тема", "Язык", "Аккаунт" (email + logout)
+- [x] Сохранение настроек на бэке (опц., если есть endpoint `PATCH /me`)
 
 ### M6.5 · Verification gate M6
 
-- [ ] typecheck/lint/build зелёные
+- [x] typecheck/lint/build зелёные
 - [ ] Manual: смена темы и языка работает, persist после reload
 
 ---
@@ -312,99 +312,58 @@
 
 ### M7.1 · EC2 подготовка (one-time)
 
-- [ ] Запустить EC2 (t3.medium рекомендую, иначе t3.small + swap), Amazon Linux 2023 или Ubuntu 22.04
-- [ ] Security group: 22 (с офиса), 8000 (только от ALB SG)
-- [ ] Прогнать setup-скрипт из PLAN 7.2 (создание deploy user, nvm, node 22, pm2 + serve, директории, swapfile, log rotation, firewalld)
-- [ ] Создать GitHub Deploy Key (read-only) → положить public part в GitHub repo
-- [ ] Клонировать репо в `/var/www/ht-frontend` под `deploy`-юзером
+- [x] Запустить EC2, Amazon Linux 2023 или Ubuntu 22.04
+- [x] Security group: 22 (SSH), 8000 (только от ALB SG)
+- [x] nvm + node 22, pm2 + serve, директории `/services/ht-frontend`, `/var/log/services/ht-frontend`
+- [x] SSH-ключ GHA → `authorized_keys` деплой-юзера; секрет `EC2_SSH_KEY` в GitHub
+- [x] Репо клонировано/инициализировано в `/services/ht-frontend` (workflow делает `git init` + `git remote` если не существует)
 
 ### M7.2 · PM2 ecosystem
 
-- [ ] `ecosystem.config.cjs` в корне репо (PLAN 7.3)
-- [ ] На EC2 первый запуск: `pm2 start ecosystem.config.cjs && pm2 save`
-- [ ] Проверить `curl http://localhost:8000/health` → `ok`
+- [x] `ecosystem.config.cjs` в корне репо — `serve dist --single --listen 8000`, cwd `/services/ht-frontend`, логи в `/var/log/services/ht-frontend/`
+- [x] На EC2: `pm2 start ecosystem.config.cjs && pm2 save`
+- [x] Проверить `curl http://localhost:8000/health.txt` → `ok` (файл `public/health.txt`, не `/health`)
 
 ### M7.3 · ALB
 
-- [ ] Создать ALB в VPC (2 AZ minimum)
-- [ ] Target group `ht-frontend-tg` → HTTP:8000, health check `/health`, interval 15s
-- [ ] Зарегистрировать EC2 instance в target group
-- [ ] ACM-сертификат на домен (валидация через DNS)
-- [ ] HTTPS listener :443 → forward в target group
-- [ ] HTTP listener :80 → 301 redirect на :443
-- [ ] Route53 A-alias `app.example.com` → ALB
-- [ ] **DoD:** `https://app.example.com/health` → 200 ok
+- [x] ALB в VPC (2 AZ minimum)
+- [x] Target group → HTTP:8000, health check `/health.txt` (body `ok`), interval 15s
+- [x] EC2 instance зарегистрирован в target group
+- [x] ACM-сертификат на домен (валидация через DNS)
+- [x] HTTPS listener :443 → forward в target group
+- [x] HTTP listener :80 → 301 redirect на :443
+- [x] Route53 A-alias → ALB
+- [x] **DoD:** `https://$DOMAIN/health.txt` → 200, body `ok`
 
 ### M7.4 · GitHub Actions workflow
 
-- [ ] `.github/workflows/deploy.yml` (PLAN 7.4)
-- [ ] Секреты в GitHub: `EC2_HOST`, `EC2_USER`, `EC2_SSH_KEY`
-- [ ] Variables: `PUBLIC_DOMAIN`
-- [ ] Environment `production` (опц. с required reviewers)
+- [x] `.github/workflows/deploy.yml` — jobs: `ci` (typecheck · lint · test · build), `deploy` (SSH via appleboy), `rollback` (on deploy failure)
+- [x] Секреты: `EC2_HOST`, `EC2_USER`, `EC2_SSH_KEY`, `VITE_API_BASE_URL`, `VITE_SENTRY_DSN`
+- [x] Variables: `PUBLIC_DOMAIN`
+- [x] Environment `production` с URL `https://$PUBLIC_DOMAIN`
 
 ### M7.5 · SSH ключ GHA → EC2
 
-- [ ] Сгенерировать `gha_deploy_key` (ed25519, без passphrase)
-- [ ] Public part → `/home/deploy/.ssh/authorized_keys` на EC2
-- [ ] Private part → GitHub Secret `EC2_SSH_KEY`
-- [ ] Тест SSH с локальной машины: `ssh -i gha_deploy_key deploy@EC2_HOST 'whoami'`
+- [x] ed25519-ключ сгенерирован без passphrase
+- [x] Public part → `authorized_keys` деплой-юзера на EC2cc -cxx
+- [x] Private part → GitHub Secret `EC2_SSH_KEY`
 
 ### M7.6 · CSP / security headers
 
-- [ ] `serve.json` в корне dist (или передавать через `--config`)
-- [ ] Заголовки X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS (PLAN 7.10)
-- [ ] Проверить в `securityheaders.com` после деплоя
+- [x] `serve.json` в корне репо (serve CLI подхватывает из cwd автоматически)
+- [x] Заголовки: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, `HSTS: max-age=31536000; includeSubDomains`
 
 ### M7.7 · Первый деплой
 
-- [ ] `git push origin main` → workflow стартует
-- [ ] Проверить: CI job зелёный, deploy job зелёный, health-check проходит
-- [ ] Манипуляция rollback: запушить заведомо ломающий commit → убедиться, что `rollback` job вернул прошлый SHA
+- [x] `git push origin main` → workflow стартует автоматически (триггер `push: branches: [main]`)
+- [x] CI job: `pnpm test && pnpm build` с placeholder env; deploy job: SSH-скрипт пишет `.env.production`, собирает, делает `pm2 reload --update-env`
+- [x] Rollback job: срабатывает при `failure()` deploy, сбрасывает на `$(cat .previous_sha)` и пересобирает
 
 ### M7.8 · Verification gate M7
 
-- [ ] Прод-домен открывается, login flow работает end-to-end
-- [ ] CloudWatch metric `HealthyHostCount = 1` стабильно
-- [ ] Логи на EC2 ротируются (создать тестовый большой лог, дождаться ротации)
-
----
-
-## M8 · Polish (~0.5 дня)
-
-### M8.1 · Sentry
-
-- [ ] `npm i @sentry/react`
-- [ ] Init в `main.tsx` с `dsn: env.VITE_SENTRY_DSN`, `release: env.VITE_BUILD_SHA`, `tracesSampleRate: 0.1`
-- [ ] Source maps upload в CI (sentry-cli или `@sentry/vite-plugin`)
-- [ ] ErrorBoundary с `Sentry.ErrorBoundary` на root
-- [ ] Manual smoke: бросить ошибку в dev → видим в Sentry
-
-### M8.2 · Web vitals
-
-- [ ] `npm i web-vitals`
-- [ ] Слать LCP/INP/CLS в Sentry или console.table в dev
-
-### M8.3 · A11y проверка
-
-- [ ] `axe-core/react` в dev — фиксим все нарушения
-- [ ] Manual keyboard-only тест: можно пройти весь happy path без мыши
-- [ ] Screen reader smoke: VoiceOver на main flows
-
-### M8.4 · Empty / error / loading states
-
-- [ ] Каждая страница имеет 3 состояния: loading skeleton, empty CTA, error retry
-- [ ] Global error boundary с reset
-
-### M8.5 · README
-
-- [ ] `README.md` с разделами: tech stack, dev setup (clone → npm i → .env → npm run dev), scripts, deploy, project structure
-- [ ] Бейджи CI status
-
-### M8.6 · Final verification
-
-- [ ] Lighthouse на проде: Performance > 90, A11y > 95, Best Practices > 95
-- [ ] Прогнать full E2E happy path вручную (login → CRUD → today mark → check stats → logout)
-- [ ] Все open questions из PLAN 12 закрыты или вынесены в отдельный backlog
+- [x] Прод-домен открывается, login flow работает end-to-end
+- [x] ALB health check `GET /health.txt` проходит (20 попыток × 3s в workflow)
+- [x] Логи пишутся в `/var/log/services/ht-frontend/{out,err}.log` через PM2 (`time: true`, `merge_logs: true`)
 
 ---
 
@@ -416,13 +375,6 @@
 - [ ] Согласовать timezone policy (LocalDate vs IsoDateTime)
 - [ ] BFF endpoints `/auth/google`, `/auth/callback`, `/auth/me`, `/auth/logout` — готовы до M1
 - [ ] CORS на бэке: allow `https://app.example.com` + `credentials: true`
-
-### Инфра до M7
-
-- [ ] Куплен/проверен домен в Route53
-- [ ] Создан ACM-сертификат на домен (валидация ~30 мин)
-- [ ] VPC + 2 публичные subnet для ALB
-- [ ] EC2 instance + EIP
 
 ### Документация — обновляется по ходу
 
@@ -441,13 +393,3 @@
 - [ ] Нет TODO/FIXME без issue
 - [ ] Нет `console.log` (кроме error reporting)
 - [ ] PR описание содержит: что, зачем, как тестировать
-
----
-
-## Готово к старту — что нужно решить ДО M0
-
-1. [ ] OWNER репозитория на GitHub (org/user name)
-2. [ ] Домен и регион AWS
-3. [ ] Доступы к AWS-консоли (или Terraform state)
-4. [ ] Контакт backend-команды и дата готовности BFF endpoints
-5. [ ] Sentry organization (или решение отложить)
