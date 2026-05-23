@@ -26,3 +26,11 @@ export type HexColor = z.infer<typeof HexColor>;
 
 export const Timezone = z.string().min(1).brand<'Timezone'>();
 export type Timezone = z.infer<typeof Timezone>;
+
+export const Page = <T extends z.ZodTypeAny>(item: T) =>
+  z.object({
+    items: z.array(item),
+    nextCursor: z.string().nullable(),
+    total: z.number().int().nonnegative().optional(),
+  });
+export type Page<T> = { items: T[]; nextCursor: string | null; total?: number };

@@ -1,7 +1,7 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { Suspense, lazy } from 'react';
 
-import { AppLayout } from '@/app/layout';
+import { type RouterContext } from '@/app/router';
 
 const Devtools = import.meta.env.PROD
   ? null
@@ -21,16 +21,14 @@ const Devtools = import.meta.env.PROD
       return { default: DevtoolsBundle };
     });
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
 });
 
 function RootComponent() {
   return (
     <>
-      <AppLayout>
-        <Outlet />
-      </AppLayout>
+      <Outlet />
       {Devtools && (
         <Suspense fallback={null}>
           <Devtools />

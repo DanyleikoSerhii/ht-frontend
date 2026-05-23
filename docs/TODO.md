@@ -108,22 +108,22 @@
 
 ### M1.6 · Login страница
 
-- [ ] `src/routes/login.tsx` — центрированная карточка с кнопкой "Войти через Google"
-- [ ] Кнопка: `window.location.href = \`\${env.VITE_API_BASE_URL}/auth/google\``
-- [ ] `src/routes/auth.callback.tsx` — спиннер + `invalidate(['auth', 'me'])` + redirect на `/`
+- [x] `src/routes/login.tsx` — центрированная карточка с кнопкой "Войти через Google"
+- [x] Кнопка: `window.location.href = \`\${env.VITE_API_BASE_URL}/auth/google\``(использован`import.meta.env.VITE_API_BASE_URL` напрямую до M1.3)
+- [x] `src/routes/auth.callback.tsx` — спиннер + `invalidate(['auth', 'me'])` + redirect на `/`
 
 ### M1.7 · Auth guard (layout route)
 
-- [ ] Создать `src/routes/_authenticated/route.tsx` с `beforeLoad`: ensure `auth.me` query → если 401 throw `redirect({ to: '/login' })`
-- [ ] Перенести `index.tsx` под `_authenticated`
-- [ ] В layout добавить avatar пользователя из `useAuth()` + кнопка Logout (вызывает `useLogout` → редирект на `/login`)
+- [x] Создать `src/routes/_authenticated/route.tsx` с `beforeLoad`: ensure `auth.me` query → если 401 throw `redirect({ to: '/login' })`
+- [x] Перенести `index.tsx` под `_authenticated`
+- [x] В layout добавить avatar пользователя из `useAuth()` + кнопка Logout (вызывает `useLogout` → редирект на `/login`)
 
 ### M1.8 · Verification gate M1
 
-- [ ] Manual smoke: неавторизованный пользователь на `/` → редирект на `/login`
-- [ ] Manual smoke: после `auth.me` 200 — `/` рендерится
-- [ ] Логаут чистит query cache и редиректит на `/login`
-- [ ] typecheck/lint/build зелёные
+- [x] Manual smoke: неавторизованный пользователь на `/` → редирект на `/login` (Chrome DevTools MCP, fetch mock 401)
+- [x] Manual smoke: после `auth.me` 200 — `/` рендерится (Chrome DevTools MCP, fetch mock 200 user)
+- [x] Логаут чистит query cache и редиректит на `/login` (Chrome DevTools MCP, mock POST /auth/logout 200 — observers refetched after removeQueries)
+- [x] typecheck/lint/build зелёные
 
 ---
 
@@ -131,40 +131,40 @@
 
 ### M2.1 · Schemas
 
-- [ ] `src/shared/api/primitives.ts` — `HabitId`, `EntryId`, `UserId`, `LocalDate`, `IsoDateTime`, `HexColor`, `Timezone`, `Page` (PLAN 6.1)
-- [ ] `src/features/habits/schemas.ts` — `HabitSchema`, `HabitFrequency`, `Weekday`, `HabitKind`, `CreateHabitInput`, `UpdateHabitInput` (PLAN 6.3)
+- [x] `src/shared/api/primitives.ts` — `HabitId`, `EntryId`, `UserId`, `LocalDate`, `IsoDateTime`, `HexColor`, `Timezone`, `Page` (PLAN 6.1)
+- [x] `src/features/habits/schemas.ts` — `HabitSchema`, `HabitFrequency`, `Weekday`, `HabitKind`, `CreateHabitInput`, `UpdateHabitInput` (PLAN 6.3)
 
 ### M2.2 · API
 
-- [ ] `src/features/habits/api.ts` — `list({archived})`, `get(id)`, `create(input)`, `update(id, input)`, `delete(id)`, `archive(id)`
-- [ ] Все ответы прогоняются через `Schema.parse(...)`
+- [x] `src/features/habits/api.ts` — `list({archived})`, `get(id)`, `create(input)`, `update(id, input)`, `delete(id)`, `archive(id)` (экспортирован как `remove` — `delete` зарезервирован в JS)
+- [x] Все ответы прогоняются через `Schema.parse(...)`
 
 ### M2.3 · Хуки
 
-- [ ] `useHabits({archived})`, `useHabit(id)` queries
-- [ ] `useCreateHabit`, `useUpdateHabit`, `useDeleteHabit`, `useArchiveHabit` mutations с `onSuccess: invalidate(queryKeys.habits.all())`
-- [ ] Toast (`sonner`) на success/error
+- [x] `useHabits({archived})`, `useHabit(id)` queries
+- [x] `useCreateHabit`, `useUpdateHabit`, `useDeleteHabit`, `useArchiveHabit` mutations с `onSuccess: invalidate(queryKeys.habits.all())`
+- [x] Toast (`sonner`) на success/error
 
 ### M2.4 · HabitForm
 
-- [ ] `src/features/habits/components/habit-form.tsx` — RHF + zodResolver на `CreateHabitInput`
-- [ ] Поля: title, description, color (color picker), icon (select из 24 lucide-иконок), kind (radio), targetPerDay (показывать только для counter), frequency (select), customDays (показывать только при custom), reminderTime
-- [ ] Server-side fieldErrors → `setError` в RHF
+- [x] `src/features/habits/components/habit-form.tsx` — RHF + zodResolver на `CreateHabitInput`
+- [x] Поля: title, description, color (color picker), icon (select из 24 lucide-иконок), kind (radio), targetPerDay (показывать только для counter), frequency (select), customDays (показывать только при custom), reminderTime
+- [x] Server-side fieldErrors → `setError` в RHF
 
 ### M2.5 · HabitList и HabitCard
 
-- [ ] `src/features/habits/components/habit-card.tsx` — карточка с icon, title, frequency, actions menu (edit, archive, delete)
-- [ ] `src/features/habits/components/habit-list.tsx` — grid из карточек, empty state, loading skeleton
-- [ ] Подтверждение delete через AlertDialog
+- [x] `src/features/habits/components/habit-card.tsx` — карточка с icon, title, frequency, actions menu (edit, archive, delete)
+- [x] `src/features/habits/components/habit-list.tsx` — grid из карточек, empty state, loading skeleton
+- [x] Подтверждение delete через AlertDialog
 
 ### M2.6 · Страница /habits
 
-- [ ] `src/routes/_authenticated/habits.tsx` — header с кнопкой "+ Привычка", `<HabitList>`, search (search param `q`), filter archived
-- [ ] Dialog с `HabitForm` для create/edit (управление через UI-store modal)
+- [x] `src/routes/_authenticated/habits.tsx` — header с кнопкой "+ Привычка", `<HabitList>`, search (search param `q`), filter archived
+- [x] Dialog с `HabitForm` для create/edit (управление через local route state; UI-store modal — M2.7)
 
 ### M2.7 · Стор модалок
 
-- [ ] `src/shared/stores/ui-store.ts` — Zustand-стор с `ModalKind` (PLAN 6.7), `selectedDate`, actions
+- [x] `src/shared/stores/ui-store.ts` — Zustand-стор с `ModalKind` (PLAN 6.7), `selectedDate`, actions
 
 ### M2.8 · Verification gate M2
 
@@ -177,32 +177,32 @@
 
 ### M3.1 · Schemas
 
-- [ ] `src/features/entries/schemas.ts` — `HabitEntrySchema`, `UpsertEntryInput`, `EntriesRangeQuery`, `TodayItemSchema` (PLAN 6.4)
+- [x] `src/features/entries/schemas.ts` — `HabitEntrySchema`, `UpsertEntryInput`, `EntriesRangeQuery`, `TodayItemSchema` (PLAN 6.4)
 
 ### M3.2 · Date helpers
 
-- [ ] `npm i dayjs`
-- [ ] `src/shared/lib/date.ts` — `getLocalDateISO(date?)`, `parseLocalDate(s)`, `addDays(d, n)`, `formatHumanDate(d, locale)`
+- [x] `npm i dayjs`
+- [x] `src/shared/lib/date.ts` — `getLocalDateISO(date?)`, `parseLocalDate(s)`, `addDays(d, n)`, `formatHumanDate(d, locale)`
 
 ### M3.3 · API + хуки
 
-- [ ] `src/features/entries/api.ts` — `getToday(date)`, `upsertEntry(habitId, input)`, `deleteEntry(habitId, date)`
-- [ ] `useTodayItems(date)` query
-- [ ] `useToggleEntry()` mutation с **optimistic update**:
+- [x] `src/features/entries/api.ts` — `getToday(date)`, `upsertEntry(habitId, input)`, `deleteEntry(habitId, date)`
+- [x] `useTodayItems(date)` query
+- [x] `useToggleEntry()` mutation с **optimistic update**:
   - `onMutate`: snapshot query, мгновенно обновить TodayItem entry
   - `onError`: rollback из snapshot
   - `onSettled`: `invalidateQueries(['today']) + (['habits', id, 'stats'])`
 
 ### M3.4 · Today UI
 
-- [ ] `src/routes/_authenticated/index.tsx` — заголовок с `DateSwitcher` (← сегодня →)
-- [ ] `DateSwitcher` использует `selectedDate` из ui-store
-- [ ] Список `TodayItem` карточек: чекбокс (boolean) или counter (− N +); note button открывает модалку
-- [ ] `isDue=false` элементы — отдельная секция "Не на сегодня" (свёрнута)
+- [x] `src/routes/_authenticated/index.tsx` — заголовок с `DateSwitcher` (← сегодня →)
+- [x] `DateSwitcher` использует `selectedDate` из ui-store
+- [x] Список `TodayItem` карточек: чекбокс (boolean) или counter (− N +); note button открывает модалку
+- [x] `isDue=false` элементы — отдельная секция "Не на сегодня" (свёрнута)
 
 ### M3.5 · Verification gate M3
 
-- [ ] typecheck/lint/build зелёные
+- [x] typecheck/lint/build зелёные
 - [ ] Manual smoke: toggle → optimistic UI обновляется до ответа сервера; network fail → rollback видим; свитч даты подгружает день
 
 ---

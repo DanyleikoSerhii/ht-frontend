@@ -1,8 +1,17 @@
-import { Link } from '@tanstack/react-router';
-import { Activity, BarChart3, CalendarDays, Settings } from 'lucide-react';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { Activity, BarChart3, CalendarDays, LogOut, Settings } from 'lucide-react';
 import { type ReactNode } from 'react';
 
+import { useAuth, useLogout } from '@/features/auth/hooks';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
 
 type NavItem = {
   to: string;
@@ -32,7 +41,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           />
           <span>Habit Tracker</span>
         </Link>
-        <button type="button" aria-label="User menu" className="size-8 rounded-full bg-muted" />
+        <UserMenu />
       </header>
 
       <div className="md:flex">
@@ -61,6 +70,60 @@ export function AppLayout({ children }: AppLayoutProps) {
         ))}
       </nav>
     </div>
+  );
+}
+
+function UserMenu() {
+  const auth = useAuth();
+  const logout = useLogout();
+  const navigate = useNavigate();
+  const user = auth.data?.user;
+  const initial = user?.name.charAt(0).toUpperCase() ?? '?';
+
+  async function handleLogout() {
+    await logout.mutateAsync();
+    await navigate({ to: '/login', replace: true });
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label="User menu"
+          className="flex size-8 items-center justify-center overflow-hidden rounded-full bg-muted text-sm font-medium text-muted-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt="" className="size-full object-cover" />
+          ) : (
+            <span aria-hidden>{initial}</span>
+          )}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-40">
+        {user && (
+          <>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">{user.name}</span>
+                <span className="text-xs text-muted-foreground">{user.email}</span>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        <DropdownMenuItem
+          variant="destructive"
+          disabled={logout.isPending}
+          onSelect={() => {
+            void handleLogout();
+          }}
+        >
+          <LogOut />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
