@@ -1,0 +1,59 @@
+# dependencies
+node_modules
+.pnpm-store
+
+# build
+dist
+dist-ssr
+*.local
+
+# env
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editors
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# test / coverage
+coverage
+.nyc_output
+
+# bundler caches
+.vite
+.turbo
+
+# misc
+.history
+
+# TanStack Router generated
+src/routeTree.gen.ts
+
+# ralph / OMC local state
+.omc
+prd.json
+progress.txt
+
+# PM2 / runtime
+logs/
+.previous_sha
+
+claude_id_ed25519

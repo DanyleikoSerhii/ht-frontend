@@ -1,0 +1,173 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: typecheck · lint · test · build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.2.2
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm test
+
+      - name: Smoke build (validate prod build passes)
+        run: pnpm build
+        env:
+          VITE_API_BASE_URL: https://api.placeholder.invalid
+          VITE_PUBLIC_DOMAIN: placeholder.invalid
+
+  deploy:
+    name: ssh deploy to EC2
+    needs: ci
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://${{ vars.PUBLIC_DOMAIN }}
+    timeout-minutes: 10
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          command_timeout: 8m
+          script_stop: true
+          script: |
+            set -euo pipefail
+            export NVM_DIR="$HOME/.nvm"
+            # shellcheck disable=SC1091
+            source "$NVM_DIR/nvm.sh"
+            nvm use default
+            corepack enable >/dev/null 2>&1 || true
+
+            APP_DIR="/services/ht-frontend"
+            REPO_URL="git@github.com:DanyleikoSerhii/ht-frontend.git"
+
+            echo "::group::ensure git workdir"
+            mkdir -p "$APP_DIR"
+            cd "$APP_DIR"
+            if [ ! -d .git ]; then
+              git init -q -b main
+              git remote add origin "$REPO_URL"
+            fi
+            echo "::endgroup::"
+
+            echo "::group::record previous SHA (before any mutation)"
+            PREV_SHA="$(git rev-parse HEAD 2>/dev/null || echo '')"
+            if [ -n "$PREV_SHA" ]; then
+              echo "$PREV_SHA" > "$APP_DIR/.previous_sha"
+              echo "previous_sha=$PREV_SHA"
+            else
+              echo "first deploy — no previous SHA recorded"
+            fi
+            echo "::endgroup::"
+
+            echo "::group::git sync"
+            git fetch --prune origin main
+            git reset --hard origin/main
+            NEW_SHA="$(git rev-parse HEAD)"
+            echo "deploying $NEW_SHA"
+            echo "::endgroup::"
+
+            echo "::group::install (full deps; build needs devDeps)"
+            pnpm install --frozen-lockfile
+            echo "::endgroup::"
+
+            echo "::group::build"
+            export VITE_BUILD_SHA="$NEW_SHA"
+            pnpm build
+            echo "::endgroup::"
+
+            echo "::group::pm2 reload-or-start"
+            if pm2 describe ht-frontend >/dev/null 2>&1; then
+              pm2 reload ecosystem.config.cjs --update-env
+            else
+              pm2 start ecosystem.config.cjs --update-env
+            fi
+            pm2 save
+            echo "::endgroup::"
+
+      - name: Wait for ALB health (asserts body == "ok")
+        env:
+          DOMAIN: ${{ vars.PUBLIC_DOMAIN }}
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 20); do
+            body="$(curl -fsS --max-time 3 "https://$DOMAIN/health" || echo '')"
+            if [ "$body" = "ok" ]; then
+              echo "healthy after ${i} attempts (body=ok)"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "::error::ALB health check failed: body did not equal 'ok' after 60s"
+          exit 1
+
+  rollback:
+    if: failure() && needs.deploy.result == 'failure'
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Rollback to previous SHA
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          command_timeout: 8m
+          script_stop: true
+          script: |
+            set -euo pipefail
+            export NVM_DIR="$HOME/.nvm"
+            source "$NVM_DIR/nvm.sh"
+            nvm use default
+            corepack enable >/dev/null 2>&1 || true
+
+            APP_DIR="/services/ht-frontend"
+            cd "$APP_DIR"
+
+            if [ ! -s .previous_sha ]; then
+              echo "::error::.previous_sha missing/empty — manual intervention required"
+              exit 1
+            fi
+            PREV="$(cat .previous_sha)"
+            echo "rolling back to $PREV"
+            git reset --hard "$PREV"
+            pnpm install --frozen-lockfile
+            pnpm build
+            if pm2 describe ht-frontend >/dev/null 2>&1; then
+              pm2 reload ecosystem.config.cjs --update-env
+            else
+              pm2 start ecosystem.config.cjs --update-env
+            fi
+            pm2 save
