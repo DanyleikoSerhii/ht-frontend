@@ -121,7 +121,7 @@ jobs:
         run: |
           set -euo pipefail
           for i in $(seq 1 20); do
-            body="$(curl -fsS --max-time 3 "https://$DOMAIN/health" || echo '')"
+            body="$(curl -fsS --max-time 3 "https://$DOMAIN/health.txt" || echo '')"
             if [ "$body" = "ok" ]; then
               echo "healthy after ${i} attempts (body=ok)"
               exit 0
