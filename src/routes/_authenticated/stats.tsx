@@ -37,31 +37,35 @@ function StatsPage() {
 
   return (
     <section className="space-y-8">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Statistics</h1>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1">
+          <p className="text-xs font-medium tracking-wide text-muted-foreground">Your progress</p>
+          <h1 className="font-display text-[2rem] leading-tight tracking-tight sm:text-[2.4rem]">
+            Statistics
+          </h1>
+        </div>
         <PeriodSelector value={period} onChange={setPeriod} />
       </header>
 
       <SummaryCards summary={summary.data} isLoading={summary.isLoading} />
 
-      <div className="space-y-2">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          Completion trend
-        </h2>
-        <div className="rounded-xl border border-border bg-card p-4">
-          <CompletionTrendChart trend={trend.data} isLoading={trend.isLoading} />
-        </div>
-      </div>
+      <ChartBlock title="Completion trend">
+        <CompletionTrendChart trend={trend.data} isLoading={trend.isLoading} />
+      </ChartBlock>
 
-      <div className="space-y-2">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          By day of week
-        </h2>
-        <div className="rounded-xl border border-border bg-card p-4">
-          <WeekdayBreakdownChart breakdown={breakdown.data} isLoading={breakdown.isLoading} />
-        </div>
-      </div>
+      <ChartBlock title="By day of week">
+        <WeekdayBreakdownChart breakdown={breakdown.data} isLoading={breakdown.isLoading} />
+      </ChartBlock>
     </section>
+  );
+}
+
+function ChartBlock({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-2.5">
+      <h2 className="px-1 text-sm font-medium text-muted-foreground">{title}</h2>
+      <div className="app-tile p-5">{children}</div>
+    </div>
   );
 }
 
@@ -72,11 +76,7 @@ type PeriodSelectorProps = {
 
 function PeriodSelector({ value, onChange }: PeriodSelectorProps) {
   return (
-    <div
-      role="tablist"
-      aria-label="Stats period"
-      className="inline-flex rounded-md border border-input p-0.5"
-    >
+    <div role="tablist" aria-label="Stats period" className="inline-flex rounded-full bg-muted p-1">
       {PERIODS.map((p) => (
         <button
           key={p}
@@ -85,9 +85,9 @@ function PeriodSelector({ value, onChange }: PeriodSelectorProps) {
           aria-selected={value === p}
           onClick={() => onChange(p)}
           className={cn(
-            'rounded px-3 py-1 text-sm font-medium transition-colors',
+            'calm rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors',
             value === p
-              ? 'bg-foreground text-background'
+              ? 'bg-card text-foreground shadow-[0_1px_2px_rgba(34,32,58,0.06)]'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >

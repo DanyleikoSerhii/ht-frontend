@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-export const UserId = z.string().uuid().brand<'UserId'>();
+export const UserId = z.string().min(1).brand<'UserId'>();
 export type UserId = z.infer<typeof UserId>;
 
-export const HabitId = z.string().uuid().brand<'HabitId'>();
+export const HabitId = z.string().min(1).brand<'HabitId'>();
 export type HabitId = z.infer<typeof HabitId>;
 
-export const EntryId = z.string().uuid().brand<'EntryId'>();
+export const EntryId = z.string().min(1).brand<'EntryId'>();
 export type EntryId = z.infer<typeof EntryId>;
 
 export const LocalDate = z

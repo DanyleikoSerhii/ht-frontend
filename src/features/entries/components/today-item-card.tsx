@@ -1,9 +1,12 @@
-import { Minus, Plus, MessageSquare, Check } from 'lucide-react';
+import * as Icons from 'lucide-react';
+import { Check, type LucideIcon, MessageSquare, Minus, Plus } from 'lucide-react';
+import { createElement } from 'react';
 
 import { cn } from '@/lib/utils';
 import { type LocalDate } from '@/shared/api/primitives';
-import { Button } from '@/shared/ui/button';
 import { useUiStore } from '@/shared/stores/ui-store';
+import { Button } from '@/shared/ui/button';
+
 import { useToggleEntry } from '../hooks';
 import { type TodayItem } from '../schemas';
 
@@ -11,6 +14,12 @@ type Props = {
   item: TodayItem;
   date: LocalDate;
 };
+
+function resolveIcon(name: string | null): LucideIcon {
+  if (!name) return Icons.CircleDashedIcon;
+  const map = Icons as unknown as Record<string, LucideIcon | undefined>;
+  return map[name] ?? Icons.CircleDashedIcon;
+}
 
 export function TodayItemCard({ item, date }: Props) {
   const { habitId, title, color, icon, kind, targetPerDay, frequency, entry } = item;
@@ -20,13 +29,10 @@ export function TodayItemCard({ item, date }: Props) {
   const count = entry?.count ?? 0;
   const isBoolean = kind === 'boolean';
   const isDone = isBoolean ? count >= 1 : count >= targetPerDay;
+  const IconComponent = resolveIcon(icon);
 
   function handleBooleanToggle() {
-    toggle({
-      habitId,
-      date,
-      input: { count: isDone ? 0 : 1 },
-    });
+    toggle({ habitId, date, input: { count: isDone ? 0 : 1 } });
   }
 
   function handleDecrement() {
@@ -41,23 +47,23 @@ export function TodayItemCard({ item, date }: Props) {
   return (
     <div
       className={cn(
-        'flex items-center gap-3 rounded-xl border bg-card p-4 shadow-sm transition-opacity',
+        'app-tile calm flex items-center gap-3 p-3.5 sm:p-4',
         isPending && 'opacity-70',
       )}
     >
-      {/* Icon circle */}
+      {/* Icon squircle */}
       <div
-        className="flex size-10 shrink-0 items-center justify-center rounded-full text-lg"
-        style={{ backgroundColor: color + '33' }}
+        className="flex size-11 shrink-0 items-center justify-center rounded-xl"
+        style={{ backgroundColor: `${color}24`, color }}
         aria-hidden
       >
-        {icon ?? '✦'}
+        {createElement(IconComponent, { className: 'size-5' })}
       </div>
 
       {/* Title + frequency */}
       <div className="min-w-0 flex-1">
-        <p className="truncate font-medium">{title}</p>
-        <p className="text-xs text-muted-foreground capitalize">{frequency}</p>
+        <p className="truncate text-[0.95rem] font-semibold tracking-tight">{title}</p>
+        <p className="text-xs capitalize text-muted-foreground">{frequency}</p>
       </div>
 
       {/* Note button */}
@@ -66,7 +72,7 @@ export function TodayItemCard({ item, date }: Props) {
         size="icon-sm"
         onClick={() => openModal({ type: 'entry-note', habitId, date })}
         aria-label={`Add note for ${title}`}
-        className={cn(entry?.note && 'text-primary')}
+        className={cn(entry?.note && 'text-[var(--color-peach)]')}
       >
         <MessageSquare />
       </Button>
@@ -80,13 +86,13 @@ export function TodayItemCard({ item, date }: Props) {
           aria-label={isDone ? `Unmark ${title}` : `Mark ${title} as done`}
           aria-pressed={isDone}
           className={cn(
-            'flex size-11 shrink-0 items-center justify-center rounded-full border-2 transition-all',
+            'calm flex size-10 shrink-0 items-center justify-center rounded-full',
             isDone
-              ? 'border-accent bg-accent text-white'
-              : 'border-border bg-background hover:border-accent/50',
+              ? 'bg-[var(--color-mint)] text-[#0f3623] shadow-[0_4px_10px_-4px_color-mix(in_oklab,var(--color-mint)_50%,transparent)]'
+              : 'border-2 border-dashed border-foreground/20 bg-transparent hover:border-[var(--color-mint)]/70',
           )}
         >
-          {isDone && <Check className="size-5" />}
+          {isDone && <Check className="size-5 animate-[fade-in_0.3s_ease]" strokeWidth={2.5} />}
         </button>
       ) : (
         <div className="flex items-center gap-1" role="group" aria-label={`Counter for ${title}`}>
@@ -99,7 +105,10 @@ export function TodayItemCard({ item, date }: Props) {
           >
             <Minus />
           </Button>
-          <span className="w-8 text-center text-sm font-semibold tabular-nums" aria-live="polite">
+          <span
+            className="min-w-10 rounded-lg bg-muted px-2 py-1 text-center text-[0.8rem] font-semibold tabular-nums"
+            aria-live="polite"
+          >
             {count}/{targetPerDay}
           </span>
           <Button

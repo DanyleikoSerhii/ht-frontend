@@ -59,11 +59,16 @@ function HabitsPage() {
 
   return (
     <section className="space-y-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Habits</h1>
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1">
+          <p className="text-xs font-medium tracking-wide text-muted-foreground">Your library</p>
+          <h1 className="font-display text-[2rem] leading-tight tracking-tight sm:text-[2.4rem]">
+            Habits
+          </h1>
+        </div>
         <Button onClick={() => openModal({ type: 'habit-create' })}>
           <PlusIcon />
-          Habit
+          New habit
         </Button>
       </header>
 
@@ -71,7 +76,7 @@ function HabitsPage() {
         <div className="relative flex-1">
           <SearchIcon
             aria-hidden
-            className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+            className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
           />
           <Input
             type="search"
@@ -79,13 +84,13 @@ function HabitsPage() {
             aria-label="Search habits"
             value={q}
             onChange={(e) => setSearch({ q: e.target.value })}
-            className="pl-9"
+            className="pl-10"
           />
         </div>
         <div
           role="tablist"
           aria-label="Habit status filter"
-          className="inline-flex rounded-md border border-input p-0.5"
+          className="inline-flex rounded-full bg-muted p-1"
         >
           <FilterTab
             active={!archived}
@@ -125,8 +130,10 @@ function FilterTab({ active, onClick, label }: FilterTabProps) {
       aria-selected={active}
       onClick={onClick}
       className={cn(
-        'rounded px-3 py-1 text-sm font-medium transition-colors',
-        active ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground',
+        'calm rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors',
+        active
+          ? 'bg-card text-foreground shadow-[0_1px_2px_rgba(34,32,58,0.06)]'
+          : 'text-muted-foreground hover:text-foreground',
       )}
     >
       {label}

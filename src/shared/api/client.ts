@@ -2,7 +2,20 @@ import ky from 'ky';
 
 import { ApiError } from './errors';
 
-const prefix = `${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '')}/api`;
+function getApiPrefix(): string {
+  if (import.meta.env.DEV) {
+    return '/api';
+  }
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  if (!baseUrl) {
+    throw new Error('VITE_API_BASE_URL is required outside development');
+  }
+
+  return `${baseUrl.replace(/\/$/, '')}/api`;
+}
+
+const prefix = getApiPrefix();
 const isDev = import.meta.env.DEV;
 
 export const api = ky.create({

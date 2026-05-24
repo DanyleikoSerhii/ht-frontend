@@ -12,9 +12,9 @@ export function DateSwitcher() {
   const isToday = selectedDate === today;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="inline-flex items-center gap-1 rounded-full border border-border bg-card p-1">
       <Button
-        variant="outline"
+        variant="ghost"
         size="icon-sm"
         onClick={() => selectDate(addDays(selectedDate, -1))}
         aria-label="Previous day"
@@ -25,14 +25,16 @@ export function DateSwitcher() {
       <button
         type="button"
         onClick={() => selectDate(today)}
-        className="min-w-[120px] rounded-full bg-muted px-4 py-1.5 text-sm font-medium transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="calm min-w-[136px] rounded-full px-3 py-1.5 text-sm font-medium tracking-tight text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:outline-none"
         aria-label={isToday ? 'Today (current)' : `Go to today from ${selectedDate}`}
       >
-        {formatHumanDate(selectedDate, 'en')}
+        {isToday
+          ? `Today · ${formatHumanDate(selectedDate, 'en')}`
+          : formatHumanDate(selectedDate, 'en')}
       </button>
 
       <Button
-        variant="outline"
+        variant="ghost"
         size="icon-sm"
         onClick={() => selectDate(addDays(selectedDate, 1))}
         aria-label="Next day"

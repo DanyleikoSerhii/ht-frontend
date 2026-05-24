@@ -44,18 +44,18 @@ export function HabitCard({ habit, onEdit, onArchive, onDelete }: HabitCardProps
   return (
     <Card
       data-archived={isArchived || undefined}
-      className={cn('gap-3 py-4 transition-opacity', isArchived && 'opacity-60')}
+      className={cn('calm gap-3 py-4', isArchived && 'opacity-60')}
     >
       <CardHeader className="flex flex-row items-start gap-3 px-4 has-data-[slot=card-action]:grid-cols-[auto_1fr_auto]">
         <span
           aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-lg"
-          style={{ backgroundColor: `${habit.color}22`, color: habit.color }}
+          className="flex size-11 shrink-0 items-center justify-center rounded-xl"
+          style={{ backgroundColor: `${habit.color}1f`, color: habit.color }}
         >
           {createElement(iconComponent, { className: 'size-5' })}
         </span>
         <div className="min-w-0 flex-1 space-y-1">
-          <CardTitle className="truncate text-base">{habit.title}</CardTitle>
+          <CardTitle className="truncate text-base font-semibold">{habit.title}</CardTitle>
           {habit.description ? (
             <CardDescription className="line-clamp-2">{habit.description}</CardDescription>
           ) : null}

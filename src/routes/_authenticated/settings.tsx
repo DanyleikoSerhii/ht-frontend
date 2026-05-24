@@ -23,43 +23,50 @@ function SettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg space-y-8">
-      <h1 className="text-2xl font-semibold tracking-tight">{t('settings.title')}</h1>
+    <div className="mx-auto max-w-xl space-y-8">
+      <header className="space-y-1">
+        <p className="text-xs font-medium tracking-wide text-muted-foreground">Preferences</p>
+        <h1 className="font-display text-[2rem] leading-tight tracking-tight sm:text-[2.4rem]">
+          {t('settings.title')}
+        </h1>
+      </header>
 
-      <section aria-labelledby="settings-theme-heading" className="space-y-3">
-        <h2
-          id="settings-theme-heading"
-          className="text-sm font-medium text-muted-foreground uppercase tracking-wide"
-        >
-          {t('settings.theme.label')}
-        </h2>
-        <ThemeToggle />
+      <section aria-labelledby="settings-theme-heading" className="app-tile space-y-3 p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-0.5">
+            <h2 id="settings-theme-heading" className="font-display text-base tracking-tight">
+              {t('settings.theme.label')}
+            </h2>
+            <p className="text-xs text-muted-foreground">Light or dark interface.</p>
+          </div>
+          <ThemeToggle />
+        </div>
       </section>
 
-      <section aria-labelledby="settings-lang-heading" className="space-y-3">
-        <h2
-          id="settings-lang-heading"
-          className="text-sm font-medium text-muted-foreground uppercase tracking-wide"
-        >
-          {t('settings.language.label')}
-        </h2>
+      <section aria-labelledby="settings-lang-heading" className="app-tile space-y-3 p-5">
+        <div className="space-y-0.5">
+          <h2 id="settings-lang-heading" className="font-display text-base tracking-tight">
+            {t('settings.language.label')}
+          </h2>
+          <p className="text-xs text-muted-foreground">Interface language.</p>
+        </div>
         <LanguageSelect />
       </section>
 
-      <section aria-labelledby="settings-account-heading" className="space-y-3">
-        <h2
-          id="settings-account-heading"
-          className="text-sm font-medium text-muted-foreground uppercase tracking-wide"
-        >
-          {t('settings.account.label')}
-        </h2>
-        {user && <p className="text-sm text-muted-foreground">{user.email}</p>}
+      <section aria-labelledby="settings-account-heading" className="app-tile space-y-3 p-5">
+        <div className="space-y-0.5">
+          <h2 id="settings-account-heading" className="font-display text-base tracking-tight">
+            {t('settings.account.label')}
+          </h2>
+          {user && <p className="text-xs text-muted-foreground">{user.email}</p>}
+        </div>
         <Button
-          variant="destructive"
+          variant="outline"
           disabled={logout.isPending}
           onClick={() => {
             void handleLogout();
           }}
+          className="text-destructive hover:bg-destructive/5 hover:text-destructive"
         >
           {t('settings.account.logout')}
         </Button>

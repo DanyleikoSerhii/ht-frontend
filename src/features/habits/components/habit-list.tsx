@@ -56,7 +56,7 @@ export function HabitList({ archived, filterText, onEdit }: HabitListProps) {
     return (
       <div
         role="alert"
-        className="flex flex-col items-start gap-3 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive"
+        className="flex flex-col items-start gap-3 rounded-2xl border border-destructive/20 bg-destructive/5 p-5 text-sm text-destructive"
       >
         <p>{message}</p>
         <Button variant="outline" size="sm" onClick={() => void query.refetch()}>
@@ -69,10 +69,12 @@ export function HabitList({ archived, filterText, onEdit }: HabitListProps) {
   if (sorted.length === 0) {
     const isFiltered = trimmedFilter.length > 0;
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16 text-center">
-        <ListChecksIcon className="size-10 text-muted-foreground" aria-hidden />
+      <div className="app-tile flex flex-col items-center justify-center gap-3 py-16 text-center">
+        <span className="flex size-12 items-center justify-center rounded-2xl bg-[var(--color-peach-soft)] text-[var(--color-peach)]">
+          <ListChecksIcon className="size-6" aria-hidden />
+        </span>
         <div className="space-y-1">
-          <h2 className="text-base font-semibold">
+          <h2 className="font-display text-base tracking-tight">
             {isFiltered ? 'No matching habits' : archived ? 'No archived habits' : 'No habits yet'}
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -144,21 +146,18 @@ function ListGrid({ children }: { children: React.ReactNode }) {
 
 function SkeletonCard() {
   return (
-    <div
-      aria-hidden
-      className="flex animate-pulse flex-col gap-3 rounded-xl border bg-card p-4 shadow-sm"
-    >
+    <div aria-hidden className="app-tile flex flex-col gap-3 p-4">
       <div className="flex items-start gap-3">
-        <div className="size-10 shrink-0 rounded-lg bg-muted" />
+        <div className="shimmer size-11 shrink-0 rounded-xl" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 w-2/3 rounded bg-muted" />
-          <div className="h-3 w-full rounded bg-muted" />
+          <div className="shimmer h-4 w-2/3 rounded-md" />
+          <div className="shimmer h-3 w-full rounded-md" />
         </div>
-        <div className="size-8 rounded-md bg-muted" />
+        <div className="shimmer size-8 rounded-lg" />
       </div>
       <div className="flex gap-1.5">
-        <div className="h-5 w-16 rounded-full bg-muted" />
-        <div className="h-5 w-20 rounded-full bg-muted" />
+        <div className="shimmer h-5 w-16 rounded-full" />
+        <div className="shimmer h-5 w-20 rounded-full" />
       </div>
     </div>
   );
