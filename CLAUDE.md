@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Package manager is `pnpm@11.2.3` (pinned via `packageManager` field). Node 22 in CI/EC2.
+Package manager is `pnpm@11.3.0` (pinned via `packageManager` field). Node 22 in CI/EC2.
 
 Always install packages with an exact version — no `^` or `~`. Example: `pnpm add lucide-react@1.16.0` (results in `"lucide-react": "1.16.0"` in `package.json`).
 
