@@ -1,9 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Flame, Sparkles, TrendingUp } from 'lucide-react';
+import { useMemo } from 'react';
 
 import { useAuth } from '@/features/auth/hooks';
 import { DateSwitcher } from '@/features/entries/components/date-switcher';
 import { TodayList } from '@/features/entries/components/today-list';
+import { useTodayItems } from '@/features/entries/hooks';
+import { type TodayItem } from '@/features/entries/schemas';
+import { useDashboardSummary } from '@/features/stats/hooks';
+import { type DashboardSummary } from '@/features/stats/schemas';
 import { useUiStore } from '@/shared/stores/ui-store';
 
 export const Route = createFileRoute('/_authenticated/')({
@@ -13,7 +18,14 @@ export const Route = createFileRoute('/_authenticated/')({
 function TodayPage() {
   const selectedDate = useUiStore((s) => s.selectedDate);
   const auth = useAuth();
+  const today = useTodayItems(selectedDate);
+  const summary = useDashboardSummary('7d');
+
   const name = auth.data?.user?.name?.split(' ')[0] ?? 'friend';
+
+  const { done, total } = useMemo(() => countDone(today.data), [today.data]);
+  const weeklyPct = useMemo(() => formatPercent(summary.data?.avgCompletionRate), [summary.data]);
+  const currentStreak = useMemo(() => maxStreak(summary.data), [summary.data]);
 
   return (
     <div className="space-y-8">
@@ -33,22 +45,25 @@ function TodayPage() {
             tone="peach"
             icon={<Flame className="size-4" />}
             label="Current streak"
-            value="7"
-            unit="days"
+            value={currentStreak !== null ? String(currentStreak) : null}
+            unit={currentStreak === 1 ? 'day' : 'days'}
+            isLoading={summary.isLoading}
           />
           <KpiTile
             tone="mint"
             icon={<Sparkles className="size-4" />}
             label="Today done"
-            value="3"
-            unit="of 5"
+            value={today.data ? String(done) : null}
+            unit={today.data ? `of ${total}` : ''}
+            isLoading={today.isLoading}
           />
           <KpiTile
             tone="blue"
             icon={<TrendingUp className="size-4" />}
             label="This week"
-            value="86%"
+            value={weeklyPct}
             unit="completion"
+            isLoading={summary.isLoading}
           />
         </div>
       </header>
@@ -59,6 +74,28 @@ function TodayPage() {
       </section>
     </div>
   );
+}
+
+function isItemDone(item: TodayItem): boolean {
+  if (!item.entry) return false;
+  return item.entry.count >= item.targetPerDay;
+}
+
+function countDone(items: TodayItem[] | undefined): { done: number; total: number } {
+  if (!items) return { done: 0, total: 0 };
+  const due = items.filter((i) => i.isDue);
+  return { done: due.filter(isItemDone).length, total: due.length };
+}
+
+function maxStreak(summary: DashboardSummary | undefined): number | null {
+  if (!summary) return null;
+  if (summary.habits.length === 0) return 0;
+  return summary.habits.reduce((acc, h) => Math.max(acc, h.currentStreak), 0);
+}
+
+function formatPercent(rate: number | undefined): string | null {
+  if (rate === undefined) return null;
+  return `${Math.round(rate * 100)}%`;
 }
 
 function greeting() {
@@ -74,8 +111,9 @@ type KpiTileProps = {
   tone: 'peach' | 'mint' | 'blue';
   icon: React.ReactNode;
   label: string;
-  value: string;
+  value: string | null;
   unit: string;
+  isLoading: boolean;
 };
 
 const TONE_FG: Record<KpiTileProps['tone'], string> = {
@@ -90,7 +128,7 @@ const TONE_SOFT: Record<KpiTileProps['tone'], string> = {
   blue: 'var(--color-blueberry-soft)',
 };
 
-function KpiTile({ tone, icon, label, value, unit }: KpiTileProps) {
+function KpiTile({ tone, icon, label, value, unit, isLoading }: KpiTileProps) {
   return (
     <div className="app-tile calm flex items-center gap-3 p-4">
       <span
@@ -101,10 +139,18 @@ function KpiTile({ tone, icon, label, value, unit }: KpiTileProps) {
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-xs font-medium text-muted-foreground">{label}</p>
-        <p className="flex items-baseline gap-1.5 font-display">
-          <span className="text-2xl font-semibold tracking-tight tabular-nums">{value}</span>
-          <span className="text-xs text-muted-foreground">{unit}</span>
-        </p>
+        {isLoading ? (
+          <div className="mt-1 h-6 w-16 animate-pulse rounded-md bg-muted" />
+        ) : (
+          <p className="flex items-baseline gap-1.5 font-display">
+            <span className="text-2xl font-semibold tracking-tight tabular-nums">
+              {value ?? '—'}
+            </span>
+            {unit && value !== null && (
+              <span className="text-xs text-muted-foreground">{unit}</span>
+            )}
+          </p>
+        )}
       </div>
     </div>
   );

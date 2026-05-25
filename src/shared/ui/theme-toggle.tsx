@@ -1,9 +1,18 @@
-import { Moon, Sun } from 'lucide-react';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
 
 import { usePrefsStore } from '@/shared/stores/prefs-store';
 import { Button } from '@/shared/ui/button';
+
+const ORDER = ['light', 'dark', 'system'] as const;
+type ThemeMode = (typeof ORDER)[number];
+
+const ICONS: Record<ThemeMode, typeof Sun> = {
+  light: Sun,
+  dark: Moon,
+  system: Monitor,
+};
 
 export function ThemeToggle() {
   const theme = usePrefsStore((s) => s.theme);
@@ -11,13 +20,13 @@ export function ThemeToggle() {
   const { setTheme } = useTheme();
   const { t } = useTranslation();
 
-  const isDark = theme === 'dark';
-  const nextTheme = isDark ? 'light' : 'dark';
-  const Icon = isDark ? Sun : Moon;
+  const current: ThemeMode = ORDER.includes(theme as ThemeMode) ? (theme as ThemeMode) : 'system';
+  const next: ThemeMode = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length] ?? 'system';
+  const Icon = ICONS[current];
 
   function handleToggle() {
-    setStoredTheme(nextTheme);
-    setTheme(nextTheme);
+    setStoredTheme(next);
+    setTheme(next);
   }
 
   return (
@@ -25,8 +34,8 @@ export function ThemeToggle() {
       type="button"
       variant="ghost"
       size="icon"
-      aria-label={`${t('settings.theme.label')}: ${t(`settings.theme.${nextTheme}`)}`}
-      title={t(`settings.theme.${nextTheme}`)}
+      aria-label={`${t('settings.theme.label')}: ${t(`settings.theme.${next}`)}`}
+      title={t(`settings.theme.${next}`)}
       onClick={handleToggle}
     >
       <Icon className="size-4" />

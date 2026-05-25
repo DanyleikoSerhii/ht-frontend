@@ -29,12 +29,20 @@ const TONE_SOFT: Record<Tone, string> = {
 };
 
 export function SummaryCards({ summary, isLoading }: Props) {
-  if (isLoading || !summary) {
+  if (isLoading) {
     return (
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {[0, 1, 2].map((i) => (
           <div key={i} className="app-tile shimmer h-20" />
         ))}
+      </div>
+    );
+  }
+
+  if (!summary) {
+    return (
+      <div className="app-tile flex h-20 items-center justify-center text-sm text-muted-foreground">
+        No data for this period
       </div>
     );
   }
